@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "InsightDocs Highlighter",
+  "version": "1.0",
+  "description": "Highlight any text and get AI-powered documentation instantly.",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "48": "icon.png"
+  }
+}
