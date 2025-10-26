@@ -12,7 +12,7 @@ router.post('/', async (req, res) => {
   const { text } = req.body;
   console.log("🔹 Request received to explain:", text);
 
-  const prompt = `
+  const message = `
 You're a helpful coding assistant. Generate structured documentation for: "${text}"
 
 Include:
@@ -41,19 +41,21 @@ Include:
 `;
 
   try {
-    const response = await cohere.generate({
-      model: 'command',
-      prompt: prompt,
-      max_tokens: 700, 
+    const response = await cohere.chat({
+      model: 'command-r-plus-08-2024',     // ✅ Updated model
+      message,                     // ✅ Correct key name
       temperature: 0.5,
+      max_tokens: 700,
     });
 
-    const result = response.generations[0].text;
-    console.log(" AI Result:", result);
-    res.json({ result });
+    console.log("✅ AI Result:", response.text);
+    res.json({ result: response.text });
   } catch (err) {
-    console.error(" Cohere Error:", err);
-    res.status(500).json({ error: 'Cohere API failed', details: err.message });
+    console.error("❌ Cohere Error:", err);
+    res.status(500).json({
+      error: 'Cohere API failed',
+      details: err.body?.message || err.message,
+    });
   }
 });
 
